@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>XTink Transfer</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body data-connected="no">
+    <div class="shell">
+      <header class="top">
+        <div class="brand">
+          <span class="brand-mark">XT</span>
+          <div>
+            <h1>XTink Transfer</h1>
+            <p class="tagline">LAN file bridge for your e‑paper reader</p>
+          </div>
+        </div>
+        <div class="conn">
+          <span id="conn-dot" data-state="offline"></span>
+          <span id="conn-label">Offline</span>
+        </div>
+      </header>
+
+      <section class="connect-card">
+        <label for="ip-input">Device IP</label>
+        <div class="connect-row">
+          <input
+            id="ip-input"
+            type="text"
+            inputmode="decimal"
+            placeholder="10.0.0.42 or e-paper.local"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button type="button" id="connect-btn" class="primary">Connect</button>
+        </div>
+        <p class="hint">
+          Same Wi‑Fi as the reader. QR links use
+          <code>?ip=…</code> — e.g.
+          <code>index.html?ip=10.229.226.142</code>
+        </p>
+      </section>
+
+      <section class="status-card" id="status-card">
+        <div class="status-grid">
+          <div>
+            <span class="label">Storage</span>
+            <strong id="storage-text">—</strong>
+            <div class="meter"><div id="storage-bar"></div></div>
+          </div>
+          <div>
+            <span class="label">Filesystem</span>
+            <strong id="fs-type">—</strong>
+          </div>
+          <div>
+            <span class="label">Device ID</span>
+            <strong id="device-id">—</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="browser-card">
+        <div class="toolbar">
+          <nav id="breadcrumb" class="breadcrumb" aria-label="Path"></nav>
+          <div class="toolbar-actions">
+            <button type="button" id="refresh-btn">Refresh</button>
+            <button type="button" id="mkdir-btn">New folder</button>
+            <button type="button" id="upload-btn" class="primary">Upload</button>
+            <input id="file-input" type="file" multiple hidden />
+          </div>
+        </div>
+
+        <div id="selection-bar" class="selection-bar" hidden>
+          <span id="sel-count">0 selected</span>
+          <button type="button" id="move-sel-btn">Move</button>
+          <button type="button" id="delete-sel-btn" class="danger">Delete</button>
+          <button type="button" id="clear-sel-btn">Clear</button>
+        </div>
+
+        <div id="drop-zone" class="drop-zone">
+          <div id="file-list" class="file-list"></div>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <p>Files go directly to the reader over your local network. Nothing is uploaded to this page’s host.</p>
+      </footer>
+    </div>
+
+    <div id="upload-panel" class="upload-panel" hidden>
+      <h2>Uploading</h2>
+      <div id="upload-items"></div>
+    </div>
+
+    <div id="toast" hidden role="status"></div>
+
+    <dialog id="move-dialog" class="move-dialog">
+      <form method="dialog" class="move-dialog-inner">
+        <header class="move-header">
+          <h2>Move to folder</h2>
+          <button type="button" id="move-close-btn" class="icon-btn" aria-label="Close">×</button>
+        </header>
+        <p id="move-sources" class="move-sources"></p>
+        <nav id="move-breadcrumb" class="breadcrumb move-breadcrumb" aria-label="Destination"></nav>
+        <div id="move-folder-list" class="move-folder-list"></div>
+        <p id="move-hint" class="move-hint"></p>
+        <footer class="move-footer">
+          <button type="button" id="move-cancel-btn">Cancel</button>
+          <button type="button" id="move-here-btn" class="primary">Move here</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
