@@ -158,11 +158,16 @@ export function writeIpCache(ip, deviceName = "") {
   );
 }
 
+/** Locale decimal keyboards emit "," — IPs need "." */
+export function normalizeHostInput(host) {
+  return String(host).replace(/,/g, ".");
+}
+
 export function parseIpFromUrl() {
   if (typeof window === "undefined") return null;
   const p = new URLSearchParams(window.location.search);
   if (!p.has("ip")) return null;
-  const ip = p.get("ip")?.replace(/^"|"$/g, "").trim();
+  const ip = normalizeHostInput(p.get("ip")?.replace(/^"|"$/g, "").trim() ?? "");
   return ip || null;
 }
 
@@ -248,6 +253,7 @@ export function _selfCheck() {
   console.assert(moveDestPath("/foo/", "/bar") === "/bar/foo/");
   console.assert(moveBlockedReason("/foo/", "/foo/bar/") !== null);
   console.assert(formatBytes(1536) === "1.5 KB");
+  console.assert(normalizeHostInput("10,0,0,1") === "10.0.0.1");
   console.assert(parseIpFromUrl() === null || typeof parseIpFromUrl() === "string");
   console.log("device-api self-check ok");
 }

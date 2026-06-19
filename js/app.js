@@ -3,6 +3,7 @@ import {
   resolveHost,
   writeIpCache,
   parseIpFromUrl,
+  normalizeHostInput,
   joinPath,
   formatBytes,
   normalizeDir,
@@ -189,8 +190,9 @@ async function refreshList() {
 }
 
 async function connect(manualIp) {
-  const ipInput = $("#ip-input").value.trim();
-  const host = manualIp || ipInput || parseIpFromUrl();
+  const ipInput = normalizeHostInput($("#ip-input").value.trim());
+  if (ipInput !== $("#ip-input").value) $("#ip-input").value = ipInput;
+  const host = normalizeHostInput(manualIp || ipInput || parseIpFromUrl() || "");
   if (host) api.setHost(host);
 
   setConnUI(false, "Connecting…");
@@ -463,6 +465,16 @@ function init() {
 
   const qip = parseIpFromUrl();
   if (qip) $("#ip-input").value = qip;
+
+  $("#ip-input").addEventListener("input", (e) => {
+    const el = e.target;
+    const fixed = normalizeHostInput(el.value);
+    if (fixed !== el.value) {
+      const pos = el.selectionStart;
+      el.value = fixed;
+      el.setSelectionRange(pos, pos);
+    }
+  });
 
   $("#connect-btn").onclick = () => connect();
   $("#refresh-btn").onclick = () => state.connected && refreshList();
